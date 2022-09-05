@@ -45,32 +45,21 @@ namespace bowlingChallenge
                 //last frame
                 if (i == gameResult.Count() - 1)
                 {
-                    totalScore = totalScore +
-                                 gameResult[i].roll1 +
-                                 gameResult[i].roll2 +
-                                 gameResult[i].roll3;
-
+                    totalScore = totalScore + LastFrame(gameResult, i);
                     gameResult[i].totalScore = totalScore;
                     continue;
                 }           
                 // neither strike or spare
                 else if (gameResult[i].roll1 + gameResult[i].roll2 < 10)
-                { 
-                    totalScore = totalScore + 
-                                 gameResult[i].roll1 + 
-                                 gameResult[i].roll2;
-
+                {
+                    totalScore = totalScore + NormalFrame(gameResult, i); 
                     gameResult[i].totalScore = totalScore;
                     continue;
                 } 
                 //strike
                 else if (gameResult[i].roll1 == 10 && (i != gameResult.Count() - 1))
                 {
-                    totalScore = totalScore + 
-                                 gameResult[i].roll1 +
-                                 gameResult[i + 1].roll1 +
-                                 gameResult[i + 1].roll2;
-
+                    totalScore = totalScore + Strike(gameResult, i); 
                     gameResult[i].totalScore = totalScore;
                     gameResult[i].notes = "Strike";
                     continue;
@@ -78,11 +67,7 @@ namespace bowlingChallenge
                 // spare
                 else if (gameResult[i].roll1 + gameResult[i].roll2 == 10)
                 {
-                    totalScore = totalScore + 
-                                 gameResult[i].roll1 +
-                                 gameResult[i].roll2 +
-                                 gameResult[i + 1].roll1;
-
+                    totalScore = totalScore + Spare(gameResult, i); 
                     gameResult[i].totalScore = totalScore;
                     gameResult[i].notes = "Spare";
                 }
@@ -105,6 +90,38 @@ namespace bowlingChallenge
                 Console.WriteLine("------------");
                 Console.WriteLine("Frame: " + gameResults[i].frameCounter + " | Roll1: " + gameResults[i].roll1 + " | Roll2: " + gameResults[i].roll2 + "" + roll3 +  " | Score: " + gameResults[i].totalScore + " | Notes: " + gameResults[i].notes);
             }
+        }
+
+        private int LastFrame(List<Frame> gameResult, int i)
+        {
+            int result = gameResult[i].roll1 +
+                         gameResult[i].roll2 +
+                         gameResult[i].roll3;
+            return result;
+        }
+
+        private int Strike(List<Frame> gameResult, int i)
+        {
+            int result = gameResult[i].roll1 +
+                         gameResult[i + 1].roll1 +
+                         gameResult[i + 1].roll2;
+            return result;
+
+        }
+
+        private int Spare(List<Frame> gameResult, int i)
+        {
+            int result = gameResult[i].roll1 +
+                         gameResult[i].roll2 +
+                         gameResult[i + 1].roll1;
+            return result;
+        }
+
+        private int NormalFrame(List<Frame> gameResult, int i)
+        {
+            int result = gameResult[i].roll1 +
+                         gameResult[i].roll2;
+            return result;
         }
     }
 }
